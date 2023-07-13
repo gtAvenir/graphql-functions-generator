@@ -1,26 +1,6 @@
 import { graphql } from "@/gql"; 
 
  // prettier-ignore 
-export const AddressFragment = graphql(/* GraphQL */ `fragment AddressFragment on Address {\n  zip\n  street\n  city\n}`);
- // prettier-ignore 
-export const AgentFragment = graphql(/* GraphQL */ `fragment AgentFragment on Agent {\n  id\n  address\n  User {\n    ...UserFragment\n  }\n}`);
- // prettier-ignore 
-export const ChannelFragment = graphql(/* GraphQL */ `fragment ChannelFragment on Channel {\n  id\n  priority\n  url\n  name\n}`);
- // prettier-ignore 
-export const CompanyFragment = graphql(/* GraphQL */ `fragment CompanyFragment on Company {\n  id\n  name\n}`);
- // prettier-ignore 
-export const CustomerFragment = graphql(/* GraphQL */ `fragment CustomerFragment on Customer {\n  id\n  address\n  User {\n    ...UserFragment\n  }\n}`);
- // prettier-ignore 
-export const DeviceFragment = graphql(/* GraphQL */ `fragment DeviceFragment on Device {\n  id\n  name\n  type\n  Users {\n    ...UserFragment\n  }\n  Rooms {\n    ...RoomFragment\n  }\n}`);
- // prettier-ignore 
-export const ProductTemplateFragment = graphql(/* GraphQL */ `fragment ProductTemplateFragment on ProductTemplate {\n  id\n  name\n  items\n}`);
- // prettier-ignore 
-export const RoleFragment = graphql(/* GraphQL */ `fragment RoleFragment on Role {\n  id\n  name\n}`);
- // prettier-ignore 
-export const RoomFragment = graphql(/* GraphQL */ `fragment RoomFragment on Room {\n  id\n  name\n  description\n  startedAt\n  endedAt\n  Agents {\n    ...AgentFragment\n  }\n  Channels {\n    ...ChannelFragment\n  }\n  Company {\n    ...CompanyFragment\n  }\n  Customers {\n    ...CustomerFragment\n  }\n  ProductTemplates {\n    ...ProductTemplateFragment\n  }\n}`);
- // prettier-ignore 
-export const UserFragment = graphql(/* GraphQL */ `fragment UserFragment on User {\n  id\n  firstName\n  lastName\n  email\n  password\n  authenticated\n  Company {\n    ...CompanyFragment\n  }\n  Role {\n    ...RoleFragment\n  }\n}`);
- // prettier-ignore 
 export const CreateAgent = graphql(/* GraphQL */ `mutation CreateAgent($id: ID!, $users_id: ID!, $address: JSON) {\n  createAgent(id: $id, users_id: $users_id, address: $address) {\n    ...AgentFragment\n  }\n}`);
  // prettier-ignore 
 export const RemoveAgent = graphql(/* GraphQL */ `mutation RemoveAgent($id: ID!) {\n  removeAgent(id: $id)\n}`);
@@ -74,39 +54,3 @@ export const CreateUser = graphql(/* GraphQL */ `mutation CreateUser($id: ID!, $
 export const RemoveUser = graphql(/* GraphQL */ `mutation RemoveUser($id: ID!) {\n  removeUser(id: $id)\n}`);
  // prettier-ignore 
 export const UpdateUser = graphql(/* GraphQL */ `mutation UpdateUser($id: ID!, $lastName: String, $firstName: String, $companies_id: ID, $email: String, $password: String, $authenticated: String, $roles_id: ID) {\n  updateUser(\n    id: $id\n    lastName: $lastName\n    firstName: $firstName\n    companies_id: $companies_id\n    email: $email\n    password: $password\n    authenticated: $authenticated\n    roles_id: $roles_id\n  ) {\n    ...UserFragment\n  }\n}`);
- // prettier-ignore 
-export const AllAgents = graphql(/* GraphQL */ `query AllAgents {\n  allAgents {\n    id\n    address\n    User {\n      ...UserFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const GetAgent = graphql(/* GraphQL */ `query GetAgent($id: ID!) {\n  Agent(id: $id) {\n    id\n    address\n    User {\n      ...UserFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const AllChannels = graphql(/* GraphQL */ `query AllChannels {\n  allChannels {\n    id\n    url\n    name\n    priority\n    Rooms {\n      ...RoomFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const GetChannel = graphql(/* GraphQL */ `query GetChannel($id: ID!) {\n  Channel(id: $id) {\n    id\n    url\n    name\n    priority\n    Rooms {\n      ...RoomFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const AllCompanies = graphql(/* GraphQL */ `query AllCompanies {\n  allCompanies {\n    id\n    name\n  }\n}`);
- // prettier-ignore 
-export const GetCompany = graphql(/* GraphQL */ `query GetCompany($id: ID!) {\n  Company(id: $id) {\n    id\n    name\n  }\n}`);
- // prettier-ignore 
-export const AllCustomers = graphql(/* GraphQL */ `query AllCustomers {\n  allCustomers {\n    id\n    address\n    User {\n      ...UserFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const GetCustomer = graphql(/* GraphQL */ `query GetCustomer($id: ID!) {\n  Customer(id: $id) {\n    id\n    address\n    User {\n      ...UserFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const AllDevices = graphql(/* GraphQL */ `query AllDevices {\n  allDevices {\n    id\n    name\n    type\n    Users {\n      ...UserFragment\n    }\n    Rooms {\n      ...RoomFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const GetDevice = graphql(/* GraphQL */ `query GetDevice($id: ID!) {\n  Device(id: $id) {\n    id\n    name\n    type\n    Users {\n      ...UserFragment\n    }\n    Rooms {\n      ...RoomFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const AllProductTemplates = graphql(/* GraphQL */ `query AllProductTemplates {\n  allProductTemplates {\n    id\n    name\n    items\n  }\n}`);
- // prettier-ignore 
-export const GetProductTemplate = graphql(/* GraphQL */ `query GetProductTemplate($id: ID!) {\n  ProductTemplate(id: $id) {\n    id\n    name\n    items\n  }\n}`);
- // prettier-ignore 
-export const AllRoles = graphql(/* GraphQL */ `query AllRoles {\n  allRoles {\n    id\n    name\n  }\n}`);
- // prettier-ignore 
-export const GetRole = graphql(/* GraphQL */ `query GetRole($id: ID!) {\n  Role(id: $id) {\n    id\n    name\n  }\n}`);
- // prettier-ignore 
-export const AllRooms = graphql(/* GraphQL */ `query AllRooms {\n  allRooms {\n    id\n    name\n    description\n    startedAt\n    endedAt\n    Agents {\n      ...AgentFragment\n    }\n    Channels {\n      ...ChannelFragment\n    }\n    Company {\n      ...CompanyFragment\n    }\n    Customers {\n      ...CustomerFragment\n    }\n    ProductTemplates {\n      ...ProductTemplateFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const GetRoom = graphql(/* GraphQL */ `query GetRoom($id: ID!) {\n  Room(id: $id) {\n    id\n    name\n    description\n    startedAt\n    endedAt\n    Agents {\n      ...AgentFragment\n    }\n    Channels {\n      ...ChannelFragment\n    }\n    Company {\n      ...CompanyFragment\n    }\n    Customers {\n      ...CustomerFragment\n    }\n    ProductTemplates {\n      ...ProductTemplateFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const AllUsers = graphql(/* GraphQL */ `query AllUsers {\n  allUsers {\n    id\n    firstName\n    lastName\n    email\n    password\n    authenticated\n    Company {\n      ...CompanyFragment\n    }\n    Role {\n      ...RoleFragment\n    }\n  }\n}`);
- // prettier-ignore 
-export const GetUser = graphql(/* GraphQL */ `query GetUser($id: ID!) {\n  User(id: $id) {\n    id\n    firstName\n    lastName\n    email\n    password\n    authenticated\n    Company {\n      ...CompanyFragment\n    }\n    Role {\n      ...RoleFragment\n    }\n  }\n}`);
