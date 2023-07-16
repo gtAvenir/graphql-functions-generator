@@ -31,36 +31,48 @@ npm install
 The script can be executed with the following command:
 
 ```
-npm run generate -- --gqlFilePath=./custom/location/gql.ts --graphqlFilePath=./custom/location/graphql.ts --outputDir=./custom/output/directory/
+npm run generate -- --gqlFilePath=./custom/location/gql.js --graphqlFilePath=./custom/location/graphql.js --outputDir=./custom/output/directory/
 ```
 
 Here's what each argument means:
 
-- `--gqlFilePath` (optional): The path to the `.ts` file that exports the `documents` object containing your GraphQL documents. The default value is `./src/gqlFilePath`.
-- `--graphqlFilePath` (optional): The path to the `.ts` file that exports the `graphql` function from the `urql` package. The default value is `./src/graphqlFilePath`.
+- `--gqlFilePath` (optional): The path to the `.js` file that exports the `documents` object containing your GraphQL documents. The default value is `./src/gqlFilePath`.
+- `--graphqlFilePath` (optional): The path to the `.js` file that exports the `graphql` function from the `urql` package. The default value is `./src/graphqlFilePath`.
 - `--outputDir` (optional): The directory where the generated `.ts` files should be saved. The default value is `./generated/`.
+
+## Usage in another package
+
+You can then import the package without officially creating a deployable. This can be done with git package installation out of the box.
+
+```bash
+npm install --save-dev git+https://github.com/gtAvenir/graphql-functions-generator.git
+```
+
+Then import the generated functions into your package and call it.
+```tsx
+import {main} from 'graphql-functions-generator';
+import path from 'path';
+
+async function useMain() {
+    // Collect paths for the generator
+    const gqlFilePath = path.resolve('/path/to/gql.ts');
+    const graphqlFilePath = path.resolve('/path/to/graphql.ts');
+    const outputDir = path.resolve(__dirname, './path/to/utils/');
+    // Pass the arguments to main
+    await main(gqlFilePath, graphqlFilePath, outputDir);
+}
+useMain();
+```
 
 ## Example
 
-Assuming that you have a `documents.ts` file in your `src` directory that exports a `documents` object, and a `gql.ts` file that exports the `graphql` function from `urql`, you can generate functions for your GraphQL documents with the following command:
+Assuming that you build typescript to javascript and used `build` folder, have a `gql.js` and `graphql.js` file that exports the `graphql` function from `urql`, you can generate functions for your GraphQL documents with the following command:
 
 ```
-npm run generate -- --gqlFilePath=./custom/location/gql.ts --graphqlFilePath=./custom/location/graphql.ts --outputDir=./custom/output/directory/
+npm run generate -- --gqlFilePath=./build/gql.js --graphqlFilePath=./build/graphql.js --outputDir=./src/generated/
 ```
 
-This command will create `fragmentFunctions.ts`, `mutationFunctions.ts`, and `queryFunctions.ts` files in the `generated` directory. These files will contain functions for all the fragments, mutations, and queries defined in your `documents` object.
-
-You can then import these functions in your React components to execute your GraphQL operations.
-
-```tsx
-import { useQuery } from 'urql';
-import { MyQuery } from './generated/queryFunctions';
-
-function MyComponent() {
-  const [result] = useQuery({ query: MyQuery });
-  // ...
-}
-```
+This command will create `fragmentFunctions.ts`, `mutationFunctions.ts`, and `queryFunctions.ts` files in the `generated` directory. These files will contain functions for all the fragments, mutations, and queries defined in your object.
 
 ## Error Handling
 
