@@ -7,7 +7,7 @@ async function generateFunctionsFile(filename: string, statements: any[], output
   await fsPromises.writeFile(path.join(outputDir, filename), content);
 }
 
-export async function main(gqlFilePath = './build/gql.ts', graphqlFilePath = './build/graphql.ts', outputDir = './generated/') {
+export async function main(gqlFilePath = './build/gql.js', graphqlFilePath = './build/graphql.js', outputDir = './generated/') {
   const args = process.argv.slice(2);
   let params: { [key: string]: string } = {
     gqlFilePath: '',
