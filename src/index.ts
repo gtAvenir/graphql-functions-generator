@@ -7,7 +7,7 @@ async function generateFunctionsFile(filename: string, statements: any[], output
   await fsPromises.writeFile(path.join(outputDir, filename), content);
 }
 
-export async function main(gqlFilePath = './src/gql.ts', graphqlFilePath = './src/graphql.ts', outputDir = './generated/') {
+export async function main(gqlFilePath = './build/gql.ts', graphqlFilePath = './build/graphql.ts', outputDir = './generated/') {
   const args = process.argv.slice(2);
   let params: { [key: string]: string } = {
     gqlFilePath: '',
@@ -31,6 +31,11 @@ export async function main(gqlFilePath = './src/gql.ts', graphqlFilePath = './sr
   if (!fs.existsSync(params.gqlFilePath) || !fs.existsSync(params.graphqlFilePath)) {
     console.error(`The files ${params.gqlFilePath} or ${params.graphqlFilePath} do not exist.`);
     process.exit(1);
+  }
+
+  // Check if outputDir exists, if not, create it
+  if (!fs.existsSync(params.outputDir)) {
+    fs.mkdirSync(params.outputDir);
   }
 
   let documents;

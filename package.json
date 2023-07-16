@@ -1,14 +1,15 @@
 {
   "name": "graphql-functions-generator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate named graphql functions",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
+    "prepare": "tsc",
     "build": "rimraf ./build && tsc",
     "build:clean": "rm -rf ./build",
     "start:dev": "npx nodemon",
     "start": "npm run build:clean && npm run build && node build/index.js",
-    "generate": "npm run build:clean && npm run build && node build/index.js --gqlFilePath=./src/gqlFilePath --graphqlFilePath=./src/graphqlFilePath --outputDir=./generated/"
+    "generate": "npm run build:clean && npm run build && node build/index.js --gqlFilePath=./build/gql --graphqlFilePath=./build/graphql --outputDir=./generated/"
   },
   "repository": {
     "type": "git",
