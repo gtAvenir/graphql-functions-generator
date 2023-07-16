@@ -7,12 +7,12 @@ async function generateFunctionsFile(filename: string, statements: any[], output
   await fsPromises.writeFile(path.join(outputDir, filename), content);
 }
 
-async function main() {
+export async function main(gqlFilePath = './src/gql.ts', graphqlFilePath = './src/graphql.ts', outputDir = './generated/') {
   const args = process.argv.slice(2);
   let params: { [key: string]: string } = {
-    gqlFilePath: './src/gql.ts',
-    graphqlFilePath: './src/graphql.ts',
-    outputDir: './generated/',
+    gqlFilePath: '',
+    graphqlFilePath: '',
+    outputDir: '',
   };
 
   // Parse command-line arguments
@@ -24,9 +24,9 @@ async function main() {
   }
 
   // Resolve file paths
-  params.gqlFilePath = path.resolve(params.gqlFilePath);
-  params.graphqlFilePath = path.resolve(params.graphqlFilePath);
-  params.outputDir = path.resolve(params.outputDir);
+  params.gqlFilePath = params.gqlFilePath ? path.resolve(params.gqlFilePath) : path.resolve(gqlFilePath);
+  params.graphqlFilePath = params.graphqlFilePath ? path.resolve(params.graphqlFilePath) : path.resolve(graphqlFilePath);
+  params.outputDir = params.outputDir ? path.resolve(params.outputDir) : path.resolve(outputDir);
 
   if (!fs.existsSync(params.gqlFilePath) || !fs.existsSync(params.graphqlFilePath)) {
     console.error(`The files ${params.gqlFilePath} or ${params.graphqlFilePath} do not exist.`);
