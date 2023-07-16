@@ -68,7 +68,7 @@ async function main() {
         }
       }
     
-      try {
+      try { 
         await generateFunctionsFile('fragmentFunctions.ts', fragments, params.outputDir);
         await generateFunctionsFile('mutationFunctions.ts', mutations, params.outputDir);
         await generateFunctionsFile('queryFunctions.ts', queries, params.outputDir);
@@ -82,5 +82,4 @@ async function main() {
     });
   });
 }
-
 main();
