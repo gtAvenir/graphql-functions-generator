@@ -7,11 +7,10 @@ async function generateFunctionsFile(filename: string, statements: any[], output
   await fsPromises.writeFile(path.join(outputDir, filename), content);
 }
 
-export default async function main(gqlFilePath = './src/gql.ts', graphqlFilePath = './src/graphql.ts', outputDir = './generated/') {
+export default async function main(gqlInDir = './in/', outputDir = './generated/') {
   const args = process.argv.slice(2);
   let params: { [key: string]: string } = {
-    gqlFilePath: '',
-    graphqlFilePath: '',
+    gqlInDir: '',
     outputDir: '',
   };
 
@@ -24,12 +23,17 @@ export default async function main(gqlFilePath = './src/gql.ts', graphqlFilePath
   }
 
   // Resolve file paths
-  params.gqlFilePath = params.gqlFilePath ? path.resolve(params.gqlFilePath) : path.resolve(gqlFilePath);
-  params.graphqlFilePath = params.graphqlFilePath ? path.resolve(params.graphqlFilePath) : path.resolve(graphqlFilePath);
+  params.gqlInDir = params.gqlInDir ? path.resolve(params.gqlInDir) : path.resolve(gqlInDir);
   params.outputDir = params.outputDir ? path.resolve(params.outputDir) : path.resolve(outputDir);
 
-  if (!fs.existsSync(params.gqlFilePath) || !fs.existsSync(params.graphqlFilePath)) {
-    console.error(`The files ${params.gqlFilePath} or ${params.graphqlFilePath} do not exist.`);
+  if (!fs.existsSync(params.gqlInDir) || !fs.lstatSync(params.gqlInDir).isDirectory()) {
+    console.error(`The folder ${params.gqlInDir} do not exist.`);
+    process.exit(1);
+  }
+  const gqlFilePath = path.resolve(params.gqlInDir + '/gql.ts');
+  const graphqlFilePath = path.resolve(params.gqlInDir + '/graphql.ts');
+  if (!fs.existsSync(gqlFilePath) || !fs.existsSync(graphqlFilePath)) {
+    console.error(`The folder ${params.gqlInDir} do not contain the file gql.ts or graphql.ts.`);
     process.exit(1);
   }
 
@@ -40,7 +44,7 @@ export default async function main(gqlFilePath = './src/gql.ts', graphqlFilePath
 
   let documents;
   const { exec } = require('child_process');
-  exec('tsc ' + params.gqlFilePath, (error: { message: any; }, stdout: any, stderr: any) => {
+  exec('tsc ' + gqlFilePath, (error: { message: any; }, stdout: any, stderr: any) => {
     if (error) {
       console.error(`Error while compiling the files: ${error.message}`);
       process.exit(1);
@@ -52,7 +56,7 @@ export default async function main(gqlFilePath = './src/gql.ts', graphqlFilePath
     console.log(`Compiled TypeScript file: ${stdout}`);
 
     // Import the compiled JavaScript file
-    const jsFilePath = params.gqlFilePath.replace('.ts', '.js');
+    const jsFilePath = gqlFilePath.replace('.ts', '.js');
     import(jsFilePath).then(async (module) => {
       const documents = module.documents;
       const fragments = [];

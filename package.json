@@ -9,7 +9,7 @@
     "build:clean": "rm -rf ./build",
     "start:dev": "npx nodemon",
     "start": "npm run build:clean && npm run build && node build/index.js",
-    "generate": "npm run build:clean && npm run build && node build/index.js --gqlFilePath=./src/gql.ts --graphqlFilePath=./src/graphql.ts --outputDir=./generated/"
+    "generate": "npm run build:clean && npm run build && node build/index.js --gqlInDir=./in/ --outputDir=./generated/"
   },
   "repository": {
     "type": "git",
