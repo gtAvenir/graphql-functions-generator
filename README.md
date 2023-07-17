@@ -31,16 +31,16 @@ npm install
 The script can be executed with the following command:
 
 ```
-npm run generate -- --gqlFilePath=./custom/location/gql.js --graphqlFilePath=./custom/location/graphql.js --outputDir=./custom/output/directory/
+npm run generate -- --gqlFilePath=./custom/location/gql.ts --graphqlFilePath=./custom/location/graphql.ts --outputDir=./custom/output/directory/
 ```
 
 Here's what each argument means:
 
-- `--gqlFilePath` (optional): The path to the `.js` file that exports the `documents` object containing your GraphQL documents. The default value is `./src/gqlFilePath`.
-- `--graphqlFilePath` (optional): The path to the `.js` file that exports the `graphql` function from the `urql` package. The default value is `./src/graphqlFilePath`.
+- `--gqlFilePath` (optional): The path to the `.ts` file that exports the `documents` object containing your GraphQL documents. The default value is `./src/gqlFilePath`.
+- `--graphqlFilePath` (optional): The path to the `.ts` file that exports the `graphql` function from the `urql` package. The default value is `./src/graphqlFilePath`.
 - `--outputDir` (optional): The directory where the generated `.ts` files should be saved. The default value is `./generated/`.
 
-## Usage in another package
+## Usage in another package (WIP DOES NOT WORK YET)
 
 You can then import the package without officially creating a deployable. This can be done with git package installation out of the box.
 
@@ -69,7 +69,7 @@ useMain();
 Assuming that you build typescript to javascript and used `build` folder, have a `gql.js` and `graphql.js` file that exports the `graphql` function from `urql`, you can generate functions for your GraphQL documents with the following command:
 
 ```
-npm run generate -- --gqlFilePath=./build/gql.js --graphqlFilePath=./build/graphql.js --outputDir=./src/generated/
+npm run generate -- --gqlFilePath=./src/gql.ts --graphqlFilePath=./src/graphql.ts --outputDir=./src/generated/
 ```
 
 This command will create `fragmentFunctions.ts`, `mutationFunctions.ts`, and `queryFunctions.ts` files in the `generated` directory. These files will contain functions for all the fragments, mutations, and queries defined in your object.

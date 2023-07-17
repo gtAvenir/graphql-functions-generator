@@ -7,7 +7,7 @@ async function generateFunctionsFile(filename: string, statements: any[], output
   await fsPromises.writeFile(path.join(outputDir, filename), content);
 }
 
-export default async function main(gqlFilePath = './build/gql.js', graphqlFilePath = './build/graphql.js', outputDir = './generated/') {
+export default async function main(gqlFilePath = './src/gql.ts', graphqlFilePath = './src/graphql.ts', outputDir = './generated/') {
   const args = process.argv.slice(2);
   let params: { [key: string]: string } = {
     gqlFilePath: '',
@@ -18,7 +18,7 @@ export default async function main(gqlFilePath = './build/gql.js', graphqlFilePa
   // Parse command-line arguments
   for (const arg of args) {
     const [key, value] = arg.split('=');
-    if(key.includes('--')) {
+    if (key.includes('--')) {
       params[key.replace('--', '')] = value;
     }
   }
@@ -38,39 +38,53 @@ export default async function main(gqlFilePath = './build/gql.js', graphqlFilePa
     fs.mkdirSync(params.outputDir);
   }
 
-  // Import the compiled JavaScript file
-  const jsFilePath = params.gqlFilePath.replace('.ts', '.js');
-  import(jsFilePath).then(async (module) => {
-    const documents = module.documents;
-    const fragments = [];
-    const mutations = [];
-    const queries = [];
-  
-    for (const key of Object.keys(documents)) {
-      const words = key.split(' ');
-      const type = words[0];
-      const name = words[1].split('(')[0];
-  
-      if (type === 'fragment') {
-        fragments.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
-      } else if (type === 'mutation') {
-        mutations.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
-      } else if (type === 'query') {
-        queries.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
-      }
-    }
-  
-    try { 
-      await generateFunctionsFile('fragmentFunctions.ts', fragments, params.outputDir);
-      await generateFunctionsFile('mutationFunctions.ts', mutations, params.outputDir);
-      await generateFunctionsFile('queryFunctions.ts', queries, params.outputDir);
-    } catch (error: any) {
-      console.error(`Error while writing to the files: ${error.message}`);
+  let documents;
+  const { exec } = require('child_process');
+  exec('tsc ' + params.gqlFilePath, (error: { message: any; }, stdout: any, stderr: any) => {
+    if (error) {
+      console.error(`Error while compiling the files: ${error.message}`);
       process.exit(1);
     }
-  }).catch((error) => {
-    console.error(`Error while importing the file: ${error.message}`);
-    process.exit(1);
+    if (stderr) {
+      console.error(`Error while compiling the files: ${stderr}`);
+      process.exit(1);
+    }
+    console.log(`Compiled TypeScript file: ${stdout}`);
+
+    // Import the compiled JavaScript file
+    const jsFilePath = params.gqlFilePath.replace('.ts', '.js');
+    import(jsFilePath).then(async (module) => {
+      const documents = module.documents;
+      const fragments = [];
+      const mutations = [];
+      const queries = [];
+
+      for (const key of Object.keys(documents)) {
+        const words = key.split(' ');
+        const type = words[0];
+        const name = words[1].split('(')[0];
+
+        if (type === 'fragment') {
+          fragments.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
+        } else if (type === 'mutation') {
+          mutations.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
+        } else if (type === 'query') {
+          queries.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
+        }
+      }
+
+      try {
+        await generateFunctionsFile('fragmentFunctions.ts', fragments, params.outputDir);
+        await generateFunctionsFile('mutationFunctions.ts', mutations, params.outputDir);
+        await generateFunctionsFile('queryFunctions.ts', queries, params.outputDir);
+      } catch (error: any) {
+        console.error(`Error while writing to the files: ${error.message}`);
+        process.exit(1);
+      }
+    }).catch((error) => {
+      console.error(`Error while importing the file: ${error.message}`);
+      process.exit(1);
+    });
   });
 }
 main();

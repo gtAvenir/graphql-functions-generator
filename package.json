@@ -9,7 +9,7 @@
     "build:clean": "rm -rf ./build",
     "start:dev": "npx nodemon",
     "start": "npm run build:clean && npm run build && node build/index.js",
-    "generate": "npm run build:clean && npm run build && node build/index.js --gqlFilePath=./build/gql --graphqlFilePath=./build/graphql --outputDir=./generated/"
+    "generate": "npm run build:clean && npm run build && node build/index.js --gqlFilePath=./src/gql.ts --graphqlFilePath=./src/graphql.ts --outputDir=./generated/"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^18.6.1",
+    "@types/node": "^18.16.19",
     "nodemon": "^2.0.19",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
