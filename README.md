@@ -40,6 +40,17 @@ Here's what each argument means:
 - `--graphqlFilePath` (optional): The path to the `.ts` file that exports the `graphql` function from the `urql` package. The default value is `./src/graphqlFilePath`.
 - `--outputDir` (optional): The directory where the generated `.ts` files should be saved. The default value is `./generated/`.
 
+## Example
+
+Assuming that you build typescript to javascript and used `build` folder, have a `gql.js` and `graphql.js` file that exports the `graphql` function from `urql`, you can generate functions for your GraphQL documents with the following command:
+
+```
+npm run generate -- --gqlFilePath=./src/gql.ts --graphqlFilePath=./src/graphql.ts --outputDir=./src/generated/
+```
+
+This command will create `fragmentFunctions.ts`, `mutationFunctions.ts`, and `queryFunctions.ts` files in the `generated` directory. These files will contain functions for all the fragments, mutations, and queries defined in your object.
+
+
 ## Usage in another package (WIP DOES NOT WORK YET)
 
 You can then import the package without officially creating a deployable. This can be done with git package installation out of the box.
@@ -63,16 +74,6 @@ async function useMain() {
 }
 useMain();
 ```
-
-## Example
-
-Assuming that you build typescript to javascript and used `build` folder, have a `gql.js` and `graphql.js` file that exports the `graphql` function from `urql`, you can generate functions for your GraphQL documents with the following command:
-
-```
-npm run generate -- --gqlFilePath=./src/gql.ts --graphqlFilePath=./src/graphql.ts --outputDir=./src/generated/
-```
-
-This command will create `fragmentFunctions.ts`, `mutationFunctions.ts`, and `queryFunctions.ts` files in the `generated` directory. These files will contain functions for all the fragments, mutations, and queries defined in your object.
 
 ## Error Handling
 
