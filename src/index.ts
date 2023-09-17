@@ -62,6 +62,7 @@ export default async function main(gqlInDir = './in/', outputDir = './generated/
       const fragments = [];
       const mutations = [];
       const queries = [];
+      const subscriptions = [];
 
       for (const key of Object.keys(documents)) {
         const words = key.split(' ');
@@ -72,6 +73,8 @@ export default async function main(gqlInDir = './in/', outputDir = './generated/
           fragments.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
         } else if (type === 'mutation') {
           mutations.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
+        } else if (type === 'subscription') {
+          subscriptions.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
         } else if (type === 'query') {
           queries.push(`export const ${name} = graphql(/* GraphQL */ \`${key}\`);`);
         }
@@ -81,6 +84,7 @@ export default async function main(gqlInDir = './in/', outputDir = './generated/
         await generateFunctionsFile('fragmentFunctions.ts', fragments, params.outputDir);
         await generateFunctionsFile('mutationFunctions.ts', mutations, params.outputDir);
         await generateFunctionsFile('queryFunctions.ts', queries, params.outputDir);
+        await generateFunctionsFile('subscriptionFunctions.ts', subscriptions, params.outputDir);
       } catch (error: any) {
         console.error(`Error while writing to the files: ${error.message}`);
         process.exit(1);
